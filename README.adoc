@@ -1,6 +1,7 @@
 :data-uri:
 :sectnums:
 :toc:
+**I have modified this from jameread/single-node-openshift-azure-tutorial to cover issues I encountered during deployment and also draw out examples of how to install other Openshift Versions. The original guide is based off RHEL 7.6 which at writing is currently out of date, and should be updated to cover RHEL 8.x. Additionally the original guide deploys version 3.11 of OpenShift. This guide will also explain how to change this version if desired. 
 
 = single-node-openshift-azure-tutorial
 
@@ -127,6 +128,13 @@ Disable all default repos, and then attach to the required repos.
     subscription-manager repos --enable 'rhel-7-server-extras-rpms'
     subscription-manager repos --enable 'rhel-7-server-ose-3.11-rpms'
 
+The rhel-7-server-ose-3.11-rpms covers the RPMs to install OpenShift 3.11, substitute this with the below if you want to deploy a different version. 
+
+If the above repos do not show up, enter the below commands:
+    subscription-manager register
+    subscription-manager refresh
+    subscription-manager attach --auto
+
 [#subs-option-b]
 ==== Option b) If you have a repository provided by your lab administrator; 
 
@@ -196,7 +204,7 @@ Make sure you are in the root home directory before continuing;
 
 We're going to run OpenShift, running inside a container. It will take about 10 minutes to come up and should be fully automatic.
 
-    oc cluster up --enable '*,automation-service-broker,service-catalog,template-service-broker' --public-hostname=<yourPublicIpAddress> --routing-suffix=<yourPublicIpAddress>.nip.io
+    oc cluster up --enable '*,automation-service-broker,service-catalog,template-service-broker' --public-hostname=<yourPublicIpAddress/publicFqdn> --routing-suffix=<FqdnExcludingFirstComponent>
 
 **Note**: You must use a valid DNS name (or IP address with nip.io) or the cluster may hang trying to contact itself when starting. 
 
@@ -241,3 +249,9 @@ https://github.com/Azure/open-service-broker-azure#openshift-project-template
 3. If you know quite a lot about Azure already, but not OpenShift, start from challenge #2; https://github.com/palma21/openshiftlab#challenge--2-create-and-manage-projects
 4. .NET and Azure focussed OpenShift demo; https://github.com/city-holidays-on-openshift-azure
 5. If you fancy a challenge; https://github.com/jbossdemocentral/coolstore-microservice
+
+== Troubleshooting?
+If you made a mistake when running oc cluster up, you need to follow the below to correct it:
+1. oc cluster down
+2. Go to /root and remove openshift.local.clusterup - this is important and previous config will be mixed in with your re-deployment.
+3. Re run oc cluster up with needed parameters. 
