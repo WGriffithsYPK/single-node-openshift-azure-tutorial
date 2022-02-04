@@ -13,10 +13,7 @@ systemctl start podman
 podman login registry.redhat.io
 
 oc cluster up no longer works in Openshift 4.x and has been replaced by openshift-installer
-
-cd /root
-
-git clone https://github.com/openshift/installer
+Prereq for building oshift-installer
 
 yum install gcc-c++
 
@@ -27,11 +24,15 @@ tar -zxvf go1.17.5.linux-amd64.tar.gz -C /usr/local/
 export PATH=$PATH:/usr/local/go/bin
 
 verify golang version - 
-go version should be 1.17.5
- 
+go version 
+should be 1.17.5
+
+mkdir /usr/oshift-installer
+cd /usr/oshift-installer
+
+git clone https://github.com/openshift/installer
+
 cd installer
 
 hack/build.sh
-
-If VM was created with defaults, you will run out of storage during compile. For test run, will be adding data drive and compiling on that. 
 
