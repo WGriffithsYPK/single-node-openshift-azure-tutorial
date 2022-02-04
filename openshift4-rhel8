@@ -1,0 +1,37 @@
+---For RHEL 8 We need to use the following Repos
+rhel-8-for-x86_64-baseos-rpms
+rhel-8-for-x86_64-appstream-rpms
+rhocp-4.8-for-rhel-8-x86_64-rpms
+
+--
+Insecure registries in daemon.json, not now needed?
+
+--
+systemctl enable podman
+systemctl start podman
+
+podman login registry.redhat.io
+
+oc cluster up no longer works in Openshift 4.x and has been replaced by openshift-installer
+
+cd /root
+
+git clone https://github.com/openshift/installer
+
+yum install gcc-c++
+
+wget https://golang.org/dl/go1.17.5.linux-amd64.tar.gz
+
+tar -zxvf go1.17.5.linux-amd64.tar.gz -C /usr/local/
+
+export PATH=$PATH:/usr/local/go/bin
+
+verify golang version - 
+go version should be 1.17.5
+ 
+cd installer
+
+hack/build.sh
+
+If VM was created with defaults, you will run out of storage during compile. For test run, will be adding data drive and compiling on that. 
+
